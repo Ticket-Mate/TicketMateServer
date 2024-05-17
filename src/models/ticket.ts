@@ -47,7 +47,7 @@ export interface ITicket {
     },
     ownerId:{
         type: Schema.Types.ObjectId, 
-        ref: 'User', 
+        ref: 'Users', 
         required: true
     },
   

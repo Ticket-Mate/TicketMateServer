@@ -14,7 +14,7 @@ export interface INotification {
   const notificationSchema = new mongoose.Schema<INotification>({
     userId:{
         type:Schema.Types.ObjectId,
-        ref:'User',
+        ref:'Users',
         required:true
     },
     eventId:{

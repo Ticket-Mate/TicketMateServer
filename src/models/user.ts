@@ -1,20 +1,16 @@
-import mongoose, {ObjectId, Schema} from "mongoose";
-import { ITicket } from "./ticket";
+import mongoose, { Schema } from "mongoose";
 
-export interface IUser {
-  _id: string;
+export interface IUser extends mongoose.Document {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
   phone: string;
-  createdAt:Date;
-  updatedAt:Date;
-  tickets?:Schema.Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+  tickets?: Schema.Types.ObjectId[];
   refreshTokens?: string[];
- 
 }
-
 
 const userSchema = new mongoose.Schema<IUser>({
   email: {
@@ -25,36 +21,36 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
-  firstName:{
+  firstName: {
     type: String,
     required: true,
   },
-  lastName:{
+  lastName: {
     type: String,
     required: true,
   },
-  phone:{
+  phone: {
     type: String,
-    required:true,
+    required: true,
   },
-  tickets:[{
+  tickets: [{
     type: Schema.Types.ObjectId,
-    ref:'Ticket'
-
+    ref: 'Ticket'
   }],
   refreshTokens: {
     type: [String],
     required: false,
   },
   createdAt: {
-   type: Date,
-   required:true,
+    type: Date,
+    default: Date.now, // Set default value to the current date
+    required: true,
   },
   updatedAt: {
     type: Date,
-   required:true,
+    default: Date.now, // Set default value to the current date
+    required: true,
   }
-
 });
 
-export default mongoose.model<IUser>("User", userSchema);
+export default mongoose.model<IUser>("Users", userSchema);
