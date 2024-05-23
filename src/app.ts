@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
+import eventRoutes from "./routes/event_route"
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {
@@ -20,6 +21,7 @@ const initApp = (): Promise<Express> => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
+      app.use('/event', eventRoutes);
       resolve(app);
     });
   });
