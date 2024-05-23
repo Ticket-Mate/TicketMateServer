@@ -1,12 +1,13 @@
 import env from "dotenv";
 env.config();
 import express, { Express } from "express";
-import cors from 'cors'
+import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
-import eventRoutes from "./routes/event_route"
+import eventRoutes from "./routes/event_route";
+import notificationRouts from "./routes/notification_routes";
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {
@@ -21,7 +22,8 @@ const initApp = (): Promise<Express> => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
-      app.use('/event', eventRoutes);
+      app.use("/event", eventRoutes);
+      app.use("/notifications", notificationRouts);
       resolve(app);
     });
   });
