@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
 import eventRoutes from "./routes/event_route";
+import ticketRoute from "./routes/ticket_route"
 import notificationRouts from "./routes/notification_routes";
 
 const initApp = (): Promise<Express> => {
@@ -23,6 +24,7 @@ const initApp = (): Promise<Express> => {
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
       app.use("/event", eventRoutes);
+      app.use("/ticket", ticketRoute);
       app.use("/notifications", notificationRouts);
       resolve(app);
     });
