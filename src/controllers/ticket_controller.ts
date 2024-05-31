@@ -8,11 +8,11 @@ import ticket from '../models/ticket';
 // Get all tickets
 
 export const getTickets = async (req: Request, res: Response) => {
-    try { 
-        const tickets= await Ticket.find();
+    try {
+        const tickets = await Ticket.find();
         res.status(200).json(tickets);
-    }catch (error){
-        res.status(500).json({message: 'Something went wrong getting the tickets'});
+    } catch (error) {
+        res.status(500).json({ message: 'Something went wrong getting the tickets' });
     }
 }
 
@@ -21,7 +21,7 @@ export const getTickets = async (req: Request, res: Response) => {
 export const getTicketById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const ticket = await Ticket.findById({_id:id});
+        const ticket = await Ticket.findById({ _id: id });
         if (!ticket) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
@@ -33,7 +33,7 @@ export const getTicketById = async (req: Request, res: Response) => {
 
 // Create a new ticket
 export const createTicket = async (req: Request, res: Response) => {
-    const { barcode, position, originalPrice, resalePrice, ownerId,eventId } = req.body;
+    const { barcode, position, originalPrice, resalePrice, ownerId, eventId } = req.body;
     try {
         const newTicket = new Ticket({
             barcode,
@@ -76,7 +76,7 @@ export const updateTicket = async (req: Request, res: Response) => {
         if (!updatedTicket) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
-        if(currentTicket.onSale != updatedTicket.onSale){
+        if (currentTicket.onSale != updatedTicket.onSale) {
             updateEventAvailableTickets(updatedTicket);
         }
         res.status(200).json(updatedTicket);
@@ -88,7 +88,7 @@ export const updateTicket = async (req: Request, res: Response) => {
 export const deleteTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const deletedTicket = await Ticket.findByIdAndDelete({_id:id});
+        const deletedTicket = await Ticket.findByIdAndDelete({ _id: id });
         if (!deletedTicket) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
@@ -98,16 +98,20 @@ export const deleteTicket = async (req: Request, res: Response) => {
     }
 };
 
-export const updateEventAvailableTickets = async (ticket: ITicket) =>{
+export const updateEventAvailableTickets = async (ticket: ITicket) => {
     const event = await Event.findById(ticket.eventId);
-    if(ticket.onSale){
-        event.updateOne({$push: {availableTicket: ticket._id}});
-        if(event.status === EventStatus.SOLD_OUT) {
-            const users = Notification.find({eventId: event._id}).populate('User');
-            logger.info(users)
-            event.updateOne({$push: {availableTicket: ticket._id}, status: EventStatus.ON_SALE});
+    if (ticket.onSale) {
+
+        if (event.status === EventStatus.SOLD_OUT) {
+            const notifications = Notification.find({ eventId: event._id }).populate('User');
+            logger.info(notifications)
+            event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
         }
-    }else{
-        event.updateOne({$pull: {availableTicket: ticket._id}});
+        else {
+            event.updateOne({ $push: { availableTicket: ticket._id } });
+        }
+    } else {
+        // TODO: add here logic to update event status to be sold out
+        event.updateOne({ $pull: { availableTicket: ticket._id } });
     }
 }

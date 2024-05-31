@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "poc": "tsc && node ./dist/src/poc_script.js",
     "build": "tsc",
     "test": "tsc && jest --detectOpenHandles --coverage --forceExit",
     "start": "tsc && node ./dist/src/server.js",

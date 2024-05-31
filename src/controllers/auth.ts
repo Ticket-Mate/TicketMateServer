@@ -32,6 +32,8 @@ const register = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
     const {email, password} = req.body;
+
+    console.log("!!!!!!!!!!!!!!!!!!!!!request body", req.body)
     
     if (!email || !password) {
         console.log("missing email or password")
