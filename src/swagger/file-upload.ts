@@ -1,4 +1,3 @@
-
 /**
  * @swagger
  * tags:
@@ -13,21 +12,29 @@
  *     summary: Upload a file
  *     tags:
  *       - File Upload
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - name: file
- *         in: formData
- *         required: true
- *         type: file
- *         description: The file to upload
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The file to upload
+ *               destination:
+ *                 type: string
+ *                 description: The destination where the file should be uploaded
  *     responses:
  *       200:
  *         description: File uploaded successfully
- *         schema:
- *           type: object
- *           properties:
- *             url:
- *               type: string
- *               description: URL of the uploaded file
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *                   description: URL of the uploaded file
  */

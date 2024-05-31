@@ -1,12 +1,9 @@
-import mongoose, {ObjectId, Schema} from "mongoose";
-import { IUser } from "./user";
-import { ITicket } from "./ticket";
- 
+import mongoose, { Schema } from "mongoose";
+
 export interface IEvent {
     _id:string,
     name:string,
     type:string,
-    apiEventId: string,
     tickets?:Schema.Types.ObjectId[];
     createdAt: Date,
     updatedAt: Date
@@ -23,10 +20,6 @@ export interface IEvent {
         type:String,
         requires:true
     },
-    apiEventId:{
-        type:String,
-        required:true
-    } ,
     tickets: [{
         type: Object,
         ref: 'Ticket'
@@ -42,10 +35,7 @@ export interface IEvent {
    availableTicket:[{
     type: Schema.ObjectId,
     ref: 'Ticket'
-    
    }]
-
-  
   });
 
   export default mongoose.model<IEvent>("Event", eventSchema);

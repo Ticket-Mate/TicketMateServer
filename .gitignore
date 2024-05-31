@@ -132,3 +132,6 @@ dist
 openssl-secret.txt
 
 .env
+
+# Stores uploaded files
+/public
