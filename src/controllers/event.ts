@@ -27,12 +27,18 @@ export const getEventById = async (req: Request, res: Response) => {
 
 // Create a new event
 export const createEvent = async (req: Request, res: Response) => {
-    const { name, type, apiEventId, tickets, availableTicket } = req.body;
+    const { name, type, status, description, images, seatmap, startDate, endDate, tickets, availableTicket} = req.body;
+
     try {
         const newEvent = new Event({
             name,
             type,
-            apiEventId,
+            images,
+            seatmap,
+            description,
+            status,
+            startDate,
+            endDate,
             tickets,
             availableTicket,
             createdAt: new Date(),
