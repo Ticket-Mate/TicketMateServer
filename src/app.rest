@@ -1,0 +1,70 @@
+@base_url_user = http://localhost:3000/user
+@base_url_auth = http://localhost:3000/auth
+@user_id = 664725f31a73164ee2d67e4e
+
+### User CRUD Operations ###
+
+# Create a new user
+GET {{base_url_user}}/{{user_id}}
+###
+
+POST {{base_url_user}}/
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "testpassword",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "1234567890",
+    "createdAt": "2024-05-17T00:00:00.000Z",
+    "updatedAt": "2024-05-17T00:00:00.000Z"
+}
+###
+PUT {{base_url_user}}/{{user_id}}
+Content-Type: application/json
+
+{
+    "email": "updated@example.com",
+    "firstName": "Updated",
+    "lastName": "User",
+    "phone": "9876543210",
+    "updatedAt": "2024-05-17T00:00:00.000Z"
+}
+
+###
+
+DELETE {{base_url_user}}/{{user_id}}
+
+###
+
+POST {{base_url_auth}}/register
+Content-Type: application/json
+
+{
+    "firstName": "New",
+    "lastName": "User",
+    "email": "newuser@example.com",
+    "password": "newuserpassword",
+    "phone": "9876543210"
+}
+
+###
+
+POST {{base_url_auth}}/login
+Content-Type: application/json
+
+{
+    "email": "newuser@example.com",
+    "password": "newuserpassword"
+}
+
+
+###
+
+GET {{base_url_auth}}/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjQ3MmM2YjRlMTJhNWE1ZGM0NGE4NTIiLCJpYXQiOjE3MTU5NDMzNzB9.pSh8CtkZEMC7zPFFNOzMrzZGPfvU-0ROE0cRpadsMAE
+
+###
+GET {{base_url_auth}}/refresh
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjQ3MmM2YjRlMTJhNWE1ZGM0NGE4NTIiLCJpYXQiOjE3MTU5NDMzMTh9.OH4AbMKgms1roHs1FM4X-hCKesE9dBhibWfYZDNV6qM
