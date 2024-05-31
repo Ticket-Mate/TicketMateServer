@@ -4,7 +4,7 @@ import Event, { EventStatus } from '../models/event';
 import Notification from '../models/notification';
 import logger from '../utils/logger';
 import ticket from '../models/ticket';
-
+import INotification from '../models/notification'
 // Get all tickets
 
 export const getTickets = async (req: Request, res: Response) => {
@@ -77,7 +77,7 @@ export const updateTicket = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Ticket not found' });
         }
         if (currentTicket.onSale != updatedTicket.onSale) {
-            updateEventAvailableTickets(updatedTicket);
+            await updateEventAvailableTickets(updatedTicket);
         }
         res.status(200).json(updatedTicket);
     } catch (error) {
@@ -103,15 +103,18 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
     if (ticket.onSale) {
 
         if (event.status === EventStatus.SOLD_OUT) {
-            const notifications = Notification.find({ eventId: event._id }).populate('User');
-            logger.info(notifications)
-            event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
+            const notifications = await Notification.find({ eventId: event._id }).populate('userId');
+            logger.info('Going to send notification!')
+            notifications.forEach((notification: any) => {
+                logger.info(`massage sant to ${notification?.userId?.firstName} ${notification?.userId?.lastName}`);
+            })
+            await event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
         }
         else {
-            event.updateOne({ $push: { availableTicket: ticket._id } });
+            await event.updateOne({ $push: { availableTicket: ticket._id } });
         }
     } else {
         // TODO: add here logic to update event status to be sold out
-        event.updateOne({ $pull: { availableTicket: ticket._id } });
+        await event.updateOne({ $pull: { availableTicket: ticket._id } });
     }
 }

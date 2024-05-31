@@ -51,7 +51,7 @@ const registerToEvent = async (userId: string, eventId: string) => {
 
 const updateTicket = async (ticketId: string) => {
     const response = await fetch(`${apiUrl}/ticket/${ticketId}`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -104,7 +104,7 @@ const main = async () => {
         }
 
         // Update ticket
-        const updatedTicket = await updateTicket("6659b92ae4373275b057a7d3");
+        const updatedTicket = await updateTicket("6659beccbeaf2d1d3ce26a25");
         if (updatedTicket) {
             console.log(`Ticket added to event: ${eventId}`);
         }

@@ -1,6 +1,4 @@
-import mongoose, {ObjectId, Schema} from "mongoose";
-import { IUser } from "./user";
-import { IEvent } from "./event";
+import mongoose, {Schema} from "mongoose";
 
  
 export interface ITicket {
@@ -49,7 +47,7 @@ export interface ITicket {
     },
     ownerId:{
         type: Schema.Types.ObjectId, 
-        ref: 'Users', 
+        ref: 'User', 
         required: true
     },
     onSale:{
@@ -57,13 +55,6 @@ export interface ITicket {
       required: true
     }
   });
-
-  ticketSchema.pre('save', function (next) {
-    
-
-    next();
-  });
-
 
   export default mongoose.model<ITicket>("Ticket", ticketSchema);
 
