@@ -21,10 +21,8 @@ export interface IEvent {
     seatmap: string,  
     startDate: Date,
     endDate: Date,
-    tickets?:Schema.Types.ObjectId[];
     createdAt: Date,
     updatedAt: Date
-    availableTicket?:Schema.Types.ObjectId[]; 
   }
 
   const eventSchema = new mongoose.Schema<IEvent>({

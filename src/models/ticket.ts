@@ -50,8 +50,14 @@ export interface ITicket {
         ref: 'Users', 
         required: true
     },
-  
   });
+
+  ticketSchema.pre('save', function (next) {
+    
+
+    next();
+  });
+
 
   export default mongoose.model<ITicket>("Ticket", ticketSchema);
 

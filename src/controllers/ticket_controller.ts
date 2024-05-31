@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import Ticket from "../models/ticket"
+import Event, { EventStatus } from '../models/event';
+import Notification from '../models/notification';
+import logger from '../utils/logger';
 
 // Get all tickets
 
@@ -87,3 +90,13 @@ export const deleteTicket = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error deleting ticket', error });
     }
 };
+
+export const checkAndTriggerNotification = async (eventId: string) => {
+    const event = await Event.findById(eventId);
+
+    if(event.status === EventStatus.SOLD_OUT) {
+        const users = Notification.find({eventId}).populate('User');
+        logger.info(users)
+    }
+
+}
