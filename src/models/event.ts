@@ -18,6 +18,7 @@ export interface IEvent {
     status: EventStatus,
     type:string,
     images: Image[]
+    seatmap: string,  
     startDate: Date,
     endDate: Date,
     tickets?:Schema.Types.ObjectId[];
@@ -58,6 +59,10 @@ export interface IEvent {
             requires:true
         }
     }],
+    seatmap: {
+        type: String,
+        requires:false
+    },
     tickets: [{
         type: Object,
         ref: 'Ticket'
