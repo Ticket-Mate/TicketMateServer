@@ -54,14 +54,19 @@ export const createEvent = async (req: Request, res: Response) => {
 // Update an existing event
 export const updateEvent = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, type, apiEventId, tickets, availableTicket } = req.body;
+    const { name, type, status, description, images, seatmap, startDate, endDate, tickets, availableTicket} = req.body;
     try {
         const updatedEvent = await Event.findByIdAndUpdate(
             id,
             {
                 name,
                 type,
-                apiEventId,
+                status,
+                description,
+                images,
+                seatmap,
+                startDate,
+                endDate,
                 tickets,
                 availableTicket,
                 updatedAt: new Date(),
