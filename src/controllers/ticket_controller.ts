@@ -17,7 +17,7 @@ export const getTickets = async (req: Request, res: Response) => {
 export const getTicketById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const ticket = await Ticket.findById(id);
+        const ticket = await Ticket.findById({_id:id});
         if (!ticket) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
@@ -29,17 +29,17 @@ export const getTicketById = async (req: Request, res: Response) => {
 
 // Create a new ticket
 export const createTicket = async (req: Request, res: Response) => {
-    const { barcode, ticketId, position, originalPrice, resalePrice, ownerId } = req.body;
+    const { barcode, position, originalPrice, resalePrice, ownerId,eventId } = req.body;
     try {
         const newTicket = new Ticket({
             barcode,
-            ticketId,
             position,
             originalPrice,
             resalePrice,
             createdAt: new Date(),
             updatedAt: new Date(),
             ownerId,
+            eventId,
         });
         await newTicket.save();
         res.status(201).json(newTicket);
@@ -51,18 +51,18 @@ export const createTicket = async (req: Request, res: Response) => {
 // Update an existing ticket
 export const updateTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { barcode, ticketId, position, originalPrice, resalePrice, ownerId } = req.body;
+    const { barcode, position, originalPrice, resalePrice, ownerId,eventId } = req.body;
     try {
         const updatedTicket = await Ticket.findByIdAndUpdate(
             id,
             {
                 barcode,
-                ticketId,
                 position,
                 originalPrice,
                 resalePrice,
                 ownerId,
                 updatedAt: new Date(),
+                eventId
             },
             { new: true }
         );
@@ -78,7 +78,7 @@ export const updateTicket = async (req: Request, res: Response) => {
 export const deleteTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const deletedTicket = await Ticket.findByIdAndDelete(id);
+        const deletedTicket = await Ticket.findByIdAndDelete({_id:id});
         if (!deletedTicket) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
