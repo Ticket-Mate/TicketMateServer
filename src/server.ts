@@ -3,6 +3,7 @@ import http from 'http';
 import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 import path from 'path';
+import logger from "./utils/logger";
 
 initApp().then((app) => {
   const options = {
@@ -23,6 +24,6 @@ initApp().then((app) => {
   const specs = swaggerJsDoc(options);
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
   http.createServer(app).listen(process.env.PORT, () => {
-    console.log(`Server running in development mode on http://localhost:${process.env.PORT}`);
+    logger.info(`Server running in development mode on http://localhost:${process.env.PORT}`);
   });
 });
