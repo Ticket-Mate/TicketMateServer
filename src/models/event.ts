@@ -61,7 +61,7 @@ export interface IEvent {
     }],
     seatmap: {
         type: String,
-        requires:true
+        requires:false
     },
     tickets: [{
         type: Object,
