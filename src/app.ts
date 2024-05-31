@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
-import eventRoutes from "./routes/event_route";
-import notificationRouts from "./routes/notification_routes";
+import eventRoutes from "./routes/event";
+import notificationRouts from "./routes/notification";
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {

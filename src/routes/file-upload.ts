@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import fs from 'fs';
-import multer, { DiskStorageOptions, MulterRequest } from 'multer';
+import multer, { MulterRequest } from 'multer';
 
 const router = Router();
 
