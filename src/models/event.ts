@@ -22,7 +22,8 @@ export interface IEvent {
     startDate: Date,
     endDate: Date,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date, 
+    availableTicket: Schema.Types.ObjectId[],
   }
 
   const eventSchema = new mongoose.Schema<IEvent>({
@@ -61,10 +62,6 @@ export interface IEvent {
         type: String,
         requires:false
     },
-    tickets: [{
-        type: Object,
-        ref: 'Ticket'
-    }],
    createdAt:{
     type:Date,
     required:true

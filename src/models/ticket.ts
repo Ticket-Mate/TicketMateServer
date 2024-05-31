@@ -1,17 +1,19 @@
 import mongoose, {ObjectId, Schema} from "mongoose";
 import { IUser } from "./user";
 import { IEvent } from "./event";
+
  
 export interface ITicket {
     _id:string,
     barcode:string,
-    eventId:IEvent,
+    eventId:Schema.Types.ObjectId,
     position: string,
     originalPrice: number,
     resalePrice?: number,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
     ownerId: Schema.Types.ObjectId;
+    onSale: boolean,
   }
 
   const ticketSchema = new mongoose.Schema<ITicket>({

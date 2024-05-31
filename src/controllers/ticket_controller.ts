@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import Ticket from "../models/ticket"
+import Ticket, { ITicket } from "../models/ticket"
 import Event, { EventStatus } from '../models/event';
 import Notification from '../models/notification';
 import logger from '../utils/logger';
+import ticket from '../models/ticket';
 
 // Get all tickets
 
@@ -43,6 +44,7 @@ export const createTicket = async (req: Request, res: Response) => {
             updatedAt: new Date(),
             ownerId,
             eventId,
+            onSale: false,
         });
         await newTicket.save();
         res.status(201).json(newTicket);
@@ -54,8 +56,9 @@ export const createTicket = async (req: Request, res: Response) => {
 // Update an existing ticket
 export const updateTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { barcode, position, originalPrice, resalePrice, ownerId,eventId } = req.body;
+    const { barcode, position, originalPrice, resalePrice, ownerId, eventId, onSale } = req.body;
     try {
+        const currentTicket = await Ticket.findById(id);
         const updatedTicket = await Ticket.findByIdAndUpdate(
             id,
             {
@@ -65,12 +68,16 @@ export const updateTicket = async (req: Request, res: Response) => {
                 resalePrice,
                 ownerId,
                 updatedAt: new Date(),
-                eventId
+                eventId,
+                onSale,
             },
             { new: true }
         );
         if (!updatedTicket) {
             return res.status(404).json({ message: 'Ticket not found' });
+        }
+        if(currentTicket.onSale != updatedTicket.onSale){
+            updateEventAvailableTickets(updatedTicket);
         }
         res.status(200).json(updatedTicket);
     } catch (error) {
@@ -91,12 +98,16 @@ export const deleteTicket = async (req: Request, res: Response) => {
     }
 };
 
-export const checkAndTriggerNotification = async (eventId: string) => {
-    const event = await Event.findById(eventId);
-
-    if(event.status === EventStatus.SOLD_OUT) {
-        const users = Notification.find({eventId}).populate('User');
-        logger.info(users)
+export const updateEventAvailableTickets = async (ticket: ITicket) =>{
+    const event = await Event.findById(ticket.eventId);
+    if(ticket.onSale){
+        event.updateOne({$push: {availableTicket: ticket._id}});
+        if(event.status === EventStatus.SOLD_OUT) {
+            const users = Notification.find({eventId: event._id}).populate('User');
+            logger.info(users)
+            event.updateOne({$push: {availableTicket: ticket._id}, status: EventStatus.ON_SALE});
+        }
+    }else{
+        event.updateOne({$pull: {availableTicket: ticket._id}});
     }
-
 }
