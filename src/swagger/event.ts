@@ -6,8 +6,14 @@
  *       type: object
  *       required:
  *         - name
+ *         - description
+ *         - status
  *         - type
- *         - apiEventId
+ *         - startDate
+ *         - endDate
+ *         - images
+ *         - createdAt
+ *         - updatedAt
  *       properties:
  *         _id:
  *           type: string
@@ -15,12 +21,36 @@
  *         name:
  *           type: string
  *           description: The name of the event
+ *         description:
+ *           type: string
+ *           description: The description of the event
+ *         status:
+ *           type: string
+ *           description: The status of the event
+ *           enum:
+ *             - sold out
+ *             - on sale
+ *             - upcoming
+ *             - cancelled
  *         type:
  *           type: string
  *           description: The type of the event
- *         apiEventId:
+ *         startDate:
  *           type: string
- *           description: The API event ID
+ *           format: date-time
+ *           description: The start date of the event
+ *         endDate:
+ *           type: string
+ *           format: date-time
+ *           description: The end date of the event
+ *         images:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               url:
+ *                 type: string
+ *                 description: The URL of the image
  *         tickets:
  *           type: array
  *           items:
@@ -42,8 +72,12 @@
  *       example:
  *         _id: 60e8c4f10b3c2b6fef9e1234
  *         name: Concert
+ *         description: A live music concert.
+ *         status: on sale
  *         type: Music
- *         apiEventId: 12345
+ *         startDate: 2021-07-09T18:00:00.000Z
+ *         endDate: 2021-07-09T22:00:00.000Z
+ *         images: [{ url: "http://example.com/image.jpg" }]
  *         tickets: [60e8c4f10b3c2b6fef9e5678]
  *         availableTicket: [60e8c4f10b3c2b6fef9e9101]
  *         createdAt: 2021-07-09T00:00:00.000Z

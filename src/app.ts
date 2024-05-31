@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
-import eventRoutes from "./routes/event_route";
-import notificationRouts from "./routes/notification_routes";
+import eventRoutes from "./routes/event";
+import notificationRoutes from "./routes/notification";
+import uploadRoutes from "./routes/file-upload"
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {
@@ -23,7 +24,9 @@ const initApp = (): Promise<Express> => {
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
       app.use("/event", eventRoutes);
-      app.use("/notifications", notificationRouts);
+      app.use("/notifications", notificationRoutes);
+      app.use("/upload", uploadRoutes)
+      app.use('/public', express.static('public'));
       resolve(app);
     });
   });
