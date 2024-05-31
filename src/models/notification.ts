@@ -1,6 +1,4 @@
-import mongoose, { ObjectId, Schema } from "mongoose";
-import { IUser } from "./user";
-import { ITicket } from "./ticket";
+import mongoose, { Schema } from "mongoose";
 
 export interface INotification {
   _id: string;
@@ -21,7 +19,6 @@ const notificationSchema = new mongoose.Schema<INotification>({
     ref: "Event",
     required: true,
   },
-
   createdAt: {
     type: Date,
     required: true,
