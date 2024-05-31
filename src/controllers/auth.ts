@@ -4,23 +4,29 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const register = async (req: Request, res: Response) => {
-    const {firstName, lastName, email, password} = req.body;
+    const { firstName, lastName, email, password, phone } = req.body;
 
-    if (!email || !password || !firstName || !lastName) {
-        return res.status(400).send("missing parameters in body request");
+    if (!email || !password || !firstName || !lastName || !phone) {
+        console.log("Missing parameters in body request");
+        return res.status(400).send("Missing parameters in body request");
     }
     try {
         const rs = await User.findOne({ 'email': email });
         if (rs != null) {
-            return res.status(406).send("email already exists");
+            console.log("User tried to register with email that already exists")
+            return res.status(406).send("Email already exists");
         }
         const salt = await bcrypt.genSalt(10);
         const encryptedPassword = await bcrypt.hash(password, salt);
+        const now = new Date(); // Get current date
         const rs2 = await User.create({ 'email': email, 'password': encryptedPassword,
-                                        'firstName': firstName, 'lastName': lastName});
+                                        'firstName': firstName, 'lastName': lastName, 'phone': phone,
+                                        'createdAt': now }); // Include createdAt
+        console.log(rs2)
         return res.status(201).send(rs2);
     } catch (err) {
-        return res.status(400).send("error missing email or password");
+        console.log("Error missing email or password")
+        return res.status(400).send("Error missing email or password");
     }
 }
 
@@ -28,15 +34,19 @@ const login = async (req: Request, res: Response) => {
     const {email, password} = req.body;
     
     if (!email || !password) {
+        console.log("missing email or password")
         return res.status(400).send("missing email or password");
     }
     try {
         const user = await User.findOne({ 'email': email });
         if (user == null) {
+            console.log("email or password incorrect")
             return res.status(401).send("email or password incorrect");
+
         }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
+            console.log("email or password incorrect")
             return res.status(401).send("email or password incorrect");
         }
 
@@ -77,6 +87,7 @@ const logout = async (req: Request, res: Response) => {
             } else {
                 userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
                 await userDb.save();
+                console.log("user logout")
                 return res.sendStatus(200);
             }
         } catch (err) {
