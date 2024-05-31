@@ -52,6 +52,10 @@ export interface ITicket {
         ref: 'Users', 
         required: true
     },
+    onSale:{
+      type: Boolean,
+      required: true
+    }
   });
 
   ticketSchema.pre('save', function (next) {
