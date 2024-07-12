@@ -1,6 +1,7 @@
 import { json } from 'body-parser';
 import readline from 'readline';
 import user from './models/user';
+import {notifyUsers} from './utils/notification'
 
 const apiUrl = 'http://localhost:3000';
 
@@ -104,7 +105,7 @@ const main = async () => {
         }
 
         // Update ticket
-        const updatedTicket = await updateTicket("6659beccbeaf2d1d3ce26a25");
+        const updatedTicket = await updateTicket("6686b8f9550765703a434201");
         if (updatedTicket) {
             console.log(`Ticket added to event: ${eventId}`);
         }

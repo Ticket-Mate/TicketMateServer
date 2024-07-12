@@ -7,7 +7,7 @@ import {
   getNotificationById,
   createNotification,
   updateNotification,
-  deleteNotification,
+  deleteNotification
 } from "../controllers/notification";
 
 const router = Router();

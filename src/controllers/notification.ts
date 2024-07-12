@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Notification from "../models/notification";
 import Event, { EventStatus } from "../models/event";
 
+
 // Get all notifications
 export const getNotifications = async (req: Request, res: Response) => {
   try {
@@ -119,3 +120,4 @@ export const deleteNotification = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to delete notification", error });
   }
 };
+

@@ -5,6 +5,7 @@ import Notification from '../models/notification';
 import logger from '../utils/logger';
 import ticket from '../models/ticket';
 import INotification from '../models/notification'
+import { notifyUsers } from '../utils/notification';
 // Get all tickets
 
 export const getTickets = async (req: Request, res: Response) => {
@@ -111,11 +112,10 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
     if (ticket.onSale) {
 
         if (event.status === EventStatus.SOLD_OUT) {
+            console.log("going to send notification");
+            
             const notifications = await Notification.find({ eventId: event._id }).populate('userId');
-            logger.info('Going to send notification!')
-            notifications.forEach((notification: any) => {
-                logger.info(`massage sant to ${notification?.userId?.firstName} ${notification?.userId?.lastName}`);
-            })
+            await notifyUsers(event.id)
             await event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
         }
         else {
