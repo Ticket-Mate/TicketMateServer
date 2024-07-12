@@ -44,9 +44,16 @@ export const createTicket = async (req: Request, res: Response) => {
             updatedAt: new Date(),
             ownerId,
             eventId,
-            onSale: false,
+            onSale: true,
         });
         await newTicket.save();
+        if (!newTicket) {
+            console.log("no new ticket");
+            
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+        console.log("ticket created");
+        await updateEventAvailableTickets(newTicket);
         res.status(201).json(newTicket);
     } catch (error) {
         res.status(500).json({ message: 'Something went wrong creating the ticket', error });
@@ -98,7 +105,8 @@ export const deleteTicket = async (req: Request, res: Response) => {
     }
 };
 
-export const updateEventAvailableTickets = async (ticket: ITicket) => {
+export const updateEventAvailableTickets = async (ticket: ITicket) => {    
+    
     const event = await Event.findById(ticket.eventId);
     if (ticket.onSale) {
 

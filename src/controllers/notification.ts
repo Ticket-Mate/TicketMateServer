@@ -1,6 +1,7 @@
 // notification_controller.ts
 import { Request, Response } from "express";
 import Notification from "../models/notification";
+import Event, { EventStatus } from "../models/event";
 
 // Get all notifications
 export const getNotifications = async (req: Request, res: Response) => {
@@ -69,6 +70,10 @@ export const getNotificationById = async (req: Request, res: Response) => {
 export const createNotification = async (req: Request, res: Response) => {
   try {
     const { userId, eventId } = req.body;
+    const event= await Event.findById(eventId);
+    if (event.status !== EventStatus.SOLD_OUT){
+      return res.status(500).json({ message: "Event isn't sold out, registration failed"})
+    }
     const newNotification = new Notification({
       userId,
       eventId,
