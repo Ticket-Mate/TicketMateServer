@@ -7,18 +7,17 @@ import {
   getNotificationById,
   createNotification,
   updateNotification,
-  deleteNotification,
+  deleteNotification
 } from "../controllers/notification";
 
 const router = Router();
 
-// Define routes
 router.get("/", getNotifications);
 router.get("/user/:userId", getNotificationsByUserId);
 router.get("/event/:eventId", getNotificationsByEventId);
 router.get("/:id", getNotificationById);
-router.post("/", createNotification);
 router.patch("/:id", updateNotification);
-router.delete("/:id", deleteNotification);
+router.post("/", createNotification);
+router.delete('/:userId/:eventId', deleteNotification);
 
 export default router;
