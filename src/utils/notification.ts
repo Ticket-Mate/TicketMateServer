@@ -6,7 +6,7 @@ import logger from './logger';
 
 const novu = new Novu(process.env.NOVU_API_KEY);
 
-export async function notifyUsers(eventId) {
+export async function notifyUsers(eventId: string, eventName: string) {
     try {
         logger.info('Going to send notification')
         const notifications = await Notification.find({ eventId });
@@ -19,7 +19,7 @@ export async function notifyUsers(eventId) {
                     subscriberId: user.id,
                     email: user.email
                 },
-                payload: { firstName: user.firstName }
+                payload: { firstName: user.firstName, eventName }
             });
             logger.info(`notification was sent to ${user.email}`)
         }

@@ -106,7 +106,7 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
 
         if (event.status === EventStatus.SOLD_OUT) {
             
-            await notifyUsers(event.id)
+            await notifyUsers(event.id, event.name)
             await event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
         }
         else {
