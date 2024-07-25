@@ -1,10 +1,8 @@
-// notification_controller.ts
 import { Request, Response } from "express";
 import Notification from "../models/notification";
 import Event, { EventStatus } from "../models/event";
 
 
-// Get all notifications
 export const getNotifications = async (req: Request, res: Response) => {
   try {
     const notifications = await Notification.find()
@@ -16,7 +14,6 @@ export const getNotifications = async (req: Request, res: Response) => {
   }
 };
 
-// Get notifications by userId
 export const getNotificationsByUserId = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -32,7 +29,6 @@ export const getNotificationsByUserId = async (req: Request, res: Response) => {
   }
 };
 
-// Get notifications by eventId
 export const getNotificationsByEventId = async (
   req: Request,
   res: Response
@@ -51,7 +47,6 @@ export const getNotificationsByEventId = async (
   }
 };
 
-// Get a single notification by ID
 export const getNotificationById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -67,7 +62,6 @@ export const getNotificationById = async (req: Request, res: Response) => {
   }
 };
 
-// Create a new notification
 export const createNotification = async (req: Request, res: Response) => {
   try {
     const { userId, eventId } = req.body;
@@ -88,7 +82,6 @@ export const createNotification = async (req: Request, res: Response) => {
   }
 };
 
-// Update a notification by ID
 export const updateNotification = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -107,7 +100,6 @@ export const updateNotification = async (req: Request, res: Response) => {
   }
 };
 
-// Delete a notification by ID
 export const deleteNotification = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -120,4 +112,3 @@ export const deleteNotification = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to delete notification", error });
   }
 };
-

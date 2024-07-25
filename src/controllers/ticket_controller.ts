@@ -2,11 +2,8 @@ import { Request, Response } from 'express';
 import Ticket, { ITicket } from "../models/ticket"
 import Event, { EventStatus } from '../models/event';
 import Notification from '../models/notification';
-import logger from '../utils/logger';
-import ticket from '../models/ticket';
-import INotification from '../models/notification'
 import { notifyUsers } from '../utils/notification';
-// Get all tickets
+import logger from '../utils/logger';
 
 export const getTickets = async (req: Request, res: Response) => {
     try {
@@ -16,8 +13,6 @@ export const getTickets = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Something went wrong getting the tickets' });
     }
 }
-
-// Get ticket by id
 
 export const getTicketById = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -32,7 +27,6 @@ export const getTicketById = async (req: Request, res: Response) => {
     }
 };
 
-// Create a new ticket
 export const createTicket = async (req: Request, res: Response) => {
     const { barcode, position, originalPrice, resalePrice, ownerId, eventId } = req.body;
     try {
@@ -61,7 +55,6 @@ export const createTicket = async (req: Request, res: Response) => {
     }
 };
 
-// Update an existing ticket
 export const updateTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { barcode, position, originalPrice, resalePrice, ownerId, eventId, onSale } = req.body;
@@ -92,7 +85,7 @@ export const updateTicket = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error updating ticket', error });
     }
 }
-// Delete an ticket
+
 export const deleteTicket = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
@@ -112,9 +105,7 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
     if (ticket.onSale) {
 
         if (event.status === EventStatus.SOLD_OUT) {
-            console.log("going to send notification");
             
-            const notifications = await Notification.find({ eventId: event._id }).populate('userId');
             await notifyUsers(event.id)
             await event.updateOne({ $push: { availableTicket: ticket._id }, status: EventStatus.ON_SALE });
         }
@@ -122,7 +113,6 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
             await event.updateOne({ $push: { availableTicket: ticket._id } });
         }
     } else {
-        // TODO: add here logic to update event status to be sold out
         await event.updateOne({ $pull: { availableTicket: ticket._id } });
     }
 }
