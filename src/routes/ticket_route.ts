@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTickets, getTicketById,createTicket,updateTicket,deleteTicket } from '../controllers/ticket_controller';
+import { getTickets, getTicketById,createTicket,updateTicket,deleteTicket, getEventsByUserId } from '../controllers/ticket_controller';
 
 const router = express.Router();
 
@@ -18,5 +18,9 @@ router.put('/:id', updateTicket);
 
 // Delete an event
 router.delete('/:id', deleteTicket);
+
+// routes/event.js
+router.get('/user/:userId', getEventsByUserId);
+
 
 export default router;

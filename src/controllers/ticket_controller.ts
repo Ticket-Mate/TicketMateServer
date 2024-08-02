@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import Ticket, { ITicket } from "../models/ticket"
 import Event, { EventStatus } from '../models/event';
-import Notification from '../models/notification';
 import { notifyUsers } from '../utils/notification';
-import logger from '../utils/logger';
 
 export const getTickets = async (req: Request, res: Response) => {
     try {
@@ -116,3 +114,15 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
         await event.updateOne({ $pull: { availableTicket: ticket._id } });
     }
 }
+
+// controllers/event.js
+export const getEventsByUserId = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    try {
+        const tickets = await Ticket.find({ ownerId: userId }).populate('eventId');
+        const events = tickets.map(ticket => ticket.eventId);
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting events', error });
+    }
+};
