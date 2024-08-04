@@ -8,6 +8,8 @@ import {
   getEventsByUserId,
   getTicketCountByEventId,
   getTicketsByUserAndEventId,
+  purchaseTickets,
+
 } from "../controllers/ticket_controller";
 
 const router = express.Router();
@@ -35,5 +37,9 @@ router.get("/user/:userId/event/:eventId/ticketCount", getTicketCountByEventId);
 
 // Get tickets by user ID and event ID
 router.get("/user/:userId/event/:eventId/tickets", getTicketsByUserAndEventId);
+
+// Purchase tickets
+router.post("/purchase", purchaseTickets);
+
 
 export default router;

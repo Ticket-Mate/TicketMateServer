@@ -3,6 +3,71 @@ import Ticket, { ITicket } from "../models/ticket";
 import Event, { EventStatus } from "../models/event";
 import { notifyUsers } from "../utils/notification";
 import User from "../models/user";
+import mongoose from "mongoose";
+
+export const purchaseTickets = async (req: Request, res: Response) => {
+  const { userId, ticketIds } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const user = await User.findById(userId).session(session);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const tickets = await Ticket.find({
+      _id: { $in: ticketIds },
+      onSale: true,
+    }).session(session);
+
+    if (tickets.length !== ticketIds.length) {
+      throw new Error("Some tickets are not available");
+    }
+
+    const updatePromises = tickets.map((ticket) =>
+      Ticket.findByIdAndUpdate(
+        ticket._id,
+        { onSale: false, ownerId: userId, updatedAt: new Date() },
+        { new: true, session }
+      )
+    );
+
+    await Promise.all(updatePromises);
+
+    const updatedTickets = await Ticket.find({
+      _id: { $in: ticketIds },
+    }).session(session);
+
+    const eventIds = [...new Set(tickets.map(ticket => ticket.eventId.toString()))];
+    const eventUpdatePromises = eventIds.map(eventId =>
+      Event.findByIdAndUpdate(
+        eventId,
+        { $pull: { availableTicket: { $in: ticketIds } } },
+        { new: true, session }
+      )
+    );
+
+    await Promise.all(eventUpdatePromises);
+
+    user.tickets.push(...ticketIds);
+    await user.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({ message: "Tickets purchased successfully", tickets: updatedTickets });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    res.status(500).json({ message: "Purchase failed", error: error.message });
+  }
+};
 
 export const getTickets = async (req: Request, res: Response) => {
   try {
