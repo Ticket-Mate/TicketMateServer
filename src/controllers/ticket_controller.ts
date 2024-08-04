@@ -54,6 +54,15 @@ export const createTicket = async (req: Request, res: Response) => {
     console.log("ticket created");
     await updateEventAvailableTickets(newTicket);
     res.status(201).json(newTicket);
+
+    const user = await User.findById(ownerId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.tickets.push(newTicket.id);
+    await user.save();
   } catch (error) {
     res
       .status(500)
