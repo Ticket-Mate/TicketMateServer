@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Ticket, { ITicket } from "../models/ticket";
 import Event, { EventStatus } from "../models/event";
 import { notifyUsers } from "../utils/notification";
+import User from "../models/user";
 
 export const getTickets = async (req: Request, res: Response) => {
   try {
@@ -154,5 +155,26 @@ export const getTicketCountByEventId = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching ticket count by event ID:", error);
     res.status(500).send("Server Error");
+  }
+};
+
+export const getTicketsByUserAndEventId = async (
+  req: Request,
+  res: Response
+) => {
+  const { userId, eventId } = req.params;
+  try {
+    const user = await User.findById(userId).populate({
+      path: "tickets",
+      match: { eventId },
+    });
+    if (!user || !user.tickets || user.tickets.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for this event and user" });
+    }
+    res.status(200).json(user.tickets);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching tickets", error });
   }
 };

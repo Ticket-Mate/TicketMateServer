@@ -7,6 +7,7 @@ import {
   deleteTicket,
   getEventsByUserId,
   getTicketCountByEventId,
+  getTicketsByUserAndEventId,
 } from "../controllers/ticket_controller";
 
 const router = express.Router();
@@ -29,6 +30,10 @@ router.delete("/:id", deleteTicket);
 // routes/event.js
 router.get("/user/:userId", getEventsByUserId);
 
+// Get ticket count by event ID
 router.get("/user/:userId/event/:eventId/ticketCount", getTicketCountByEventId);
+
+// Get tickets by user ID and event ID
+router.get("/user/:userId/event/:eventId/tickets", getTicketsByUserAndEventId);
 
 export default router;
