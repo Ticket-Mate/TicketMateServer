@@ -16,7 +16,7 @@ export const getEvents = async (req: Request, res: Response) => {
 export const getEventById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const event = await Event.findById(id);
+    const event = await Event.findById(id).populate('availableTicket');
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
