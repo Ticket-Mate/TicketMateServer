@@ -27,7 +27,7 @@ export const getEventById = async (req: Request, res: Response) => {
 
 // Create a new event
 export const createEvent = async (req: Request, res: Response) => {
-    const { name, type, status, description, images, seatmap, startDate, endDate,  availableTicket} = req.body;
+    const { name, type, status, description, images, seatmap, startDate, endDate,  availableTicket ,location} = req.body;
 
     try {
         const newEvent = new Event({
@@ -42,6 +42,7 @@ export const createEvent = async (req: Request, res: Response) => {
             availableTicket,
             createdAt: new Date(),
             updatedAt: new Date(),
+            location,
         });
         await newEvent.save();
         res.status(201).json(newEvent);
@@ -53,7 +54,7 @@ export const createEvent = async (req: Request, res: Response) => {
 // Update an existing event
 export const updateEvent = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, type, status, description, images, seatmap, startDate, endDate, availableTicket} = req.body;
+    const { name, type, status, description, images, seatmap, startDate, endDate, availableTicket,location} = req.body;
     try {
         const updatedEvent = await Event.findByIdAndUpdate(
             id,
@@ -68,6 +69,7 @@ export const updateEvent = async (req: Request, res: Response) => {
                 endDate,
                 availableTicket,
                 updatedAt: new Date(),
+                location,
             },
             { new: true }
         );

@@ -24,6 +24,7 @@ export interface IEvent {
     createdAt: Date,
     updatedAt: Date, 
     availableTicket: Schema.Types.ObjectId[],
+    location:string,
   }
 
   const eventSchema = new mongoose.Schema<IEvent>({
@@ -73,7 +74,12 @@ export interface IEvent {
    availableTicket:[{
     type: Schema.ObjectId,
     ref: 'Ticket'
-   }]
+   }],
+   location:{
+    type: String,
+    requires:false
+
+   }
   });
 
   eventSchema.pre('save', function (next) {
