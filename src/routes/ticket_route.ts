@@ -10,6 +10,8 @@ import {
   getTicketsByUserAndEventId,
   purchaseTickets,
   removeEventAvailableTickets,
+  updateTicketPrice,
+  removeTicketFromSale,
 } from "../controllers/ticket_controller";
 
 const router = express.Router();
@@ -43,5 +45,11 @@ router.post("/purchase", purchaseTickets);
 
 // Remove event's available tickets
 router.post("/removeEventAvailableTickets", removeEventAvailableTickets);
+
+// Update ticket price and status
+router.put("/updateTicketPrice/:id", updateTicketPrice);
+
+// Remove ticket from sale
+router.put("/removeTicketFromSale/:id", removeTicketFromSale);
 
 export default router;

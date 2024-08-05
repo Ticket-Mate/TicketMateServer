@@ -279,3 +279,51 @@ export const removeEventAvailableTickets = async (req, res) => {
     res.status(500).json({ message: "Error removing ticket from sale", error });
   }
 };
+
+export const updateTicketPrice = async (req, res) => {
+  const { id } = req.params;
+  const { resalePrice, onSale } = req.body;
+
+  try {
+    const updatedTicket = await Ticket.findByIdAndUpdate(
+      id,
+      {
+        resalePrice,
+        onSale,
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!updatedTicket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    res.status(200).json(updatedTicket);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating ticket price", error });
+  }
+};
+
+export const removeTicketFromSale = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const ticket = await Ticket.findById(id);
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const event = await Event.findById(ticket.eventId);
+    if (event) {
+      await event.updateOne({ $pull: { availableTicket: ticket._id } });
+    }
+
+    ticket.onSale = false;
+    await ticket.save();
+
+    res.status(200).json({ message: "Ticket removed from sale" });
+  } catch (error) {
+    res.status(500).json({ message: "Error removing ticket from sale", error });
+  }
+};
