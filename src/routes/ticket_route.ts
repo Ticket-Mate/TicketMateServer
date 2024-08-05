@@ -9,7 +9,7 @@ import {
   getTicketCountByEventId,
   getTicketsByUserAndEventId,
   purchaseTickets,
-
+  removeEventAvailableTickets,
 } from "../controllers/ticket_controller";
 
 const router = express.Router();
@@ -41,5 +41,7 @@ router.get("/user/:userId/event/:eventId/tickets", getTicketsByUserAndEventId);
 // Purchase tickets
 router.post("/purchase", purchaseTickets);
 
+// Remove event's available tickets
+router.post("/removeEventAvailableTickets", removeEventAvailableTickets);
 
 export default router;

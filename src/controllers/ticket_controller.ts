@@ -44,8 +44,10 @@ export const purchaseTickets = async (req: Request, res: Response) => {
       _id: { $in: ticketIds },
     }).session(session);
 
-    const eventIds = [...new Set(tickets.map(ticket => ticket.eventId.toString()))];
-    const eventUpdatePromises = eventIds.map(eventId =>
+    const eventIds = [
+      ...new Set(tickets.map((ticket) => ticket.eventId.toString())),
+    ];
+    const eventUpdatePromises = eventIds.map((eventId) =>
       Event.findByIdAndUpdate(
         eventId,
         { $pull: { availableTicket: { $in: ticketIds } } },
@@ -61,7 +63,12 @@ export const purchaseTickets = async (req: Request, res: Response) => {
     await session.commitTransaction();
     session.endSession();
 
-    res.status(200).json({ message: "Tickets purchased successfully", tickets: updatedTickets });
+    res
+      .status(200)
+      .json({
+        message: "Tickets purchased successfully",
+        tickets: updatedTickets,
+      });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -121,7 +128,7 @@ export const createTicket = async (req: Request, res: Response) => {
     res.status(201).json(newTicket);
 
     const user = await User.findById(ownerId);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -250,5 +257,25 @@ export const getTicketsByUserAndEventId = async (
     res.status(200).json(user.tickets);
   } catch (error) {
     res.status(500).json({ message: "Error fetching tickets", error });
+  }
+};
+
+export const removeEventAvailableTickets = async (req, res) => {
+  const { ticketId } = req.body;
+  try {
+    const ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const event = await Event.findById(ticket.eventId);
+    await event.updateOne({ $pull: { availableTicket: ticket._id } });
+
+    ticket.onSale = false;
+    await ticket.save();
+
+    res.status(200).json({ message: "Ticket removed from sale" });
+  } catch (error) {
+    res.status(500).json({ message: "Error removing ticket from sale", error });
   }
 };
