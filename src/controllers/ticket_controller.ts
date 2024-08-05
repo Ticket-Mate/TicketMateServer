@@ -57,6 +57,17 @@ export const purchaseTickets = async (req: Request, res: Response) => {
 
     await Promise.all(eventUpdatePromises);
 
+    // Check if any event's available tickets list is now empty and update its status to SOLD_OUT
+    const soldOutEventPromises = eventIds.map(async (eventId) => {
+      const event = await Event.findById(eventId).session(session);
+      if (event && event.availableTicket.length === 0) {
+        event.status = EventStatus.SOLD_OUT;
+        await event.save({ session });
+      }
+    });
+
+    await Promise.all(soldOutEventPromises);
+
     user.tickets.push(...ticketIds);
     await user.save({ session });
 
