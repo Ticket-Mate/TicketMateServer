@@ -218,10 +218,12 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
             await event.updateOne({ $push: { availableTicket: ticket._id } });
         }
     } else {
-        const updatedEvent = await event.updateOne({ $pull: { availableTicket: ticket._id } });
-        if (updatedEvent && updatedEvent.availableTicket.length === 0) {
-            updatedEvent.status = EventStatus.SOLD_OUT;
-            await updatedEvent.save();
+        if (event.status === EventStatus.ON_SALE) {
+            const updatedEvent = await event.updateOne({ $pull: { availableTicket: ticket._id } });
+            if (updatedEvent && updatedEvent.availableTicket.length === 0) {
+                updatedEvent.status = EventStatus.SOLD_OUT;
+                await updatedEvent.save();
+            }
         }
     }
 };
