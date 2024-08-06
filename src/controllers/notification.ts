@@ -43,6 +43,22 @@ export const getNotificationsByEventId = async (
       .json({ message: "Failed to get notifications for event", error });
   }
 };
+// same func just do find by user id 
+export const getInterestsEventsByUserId = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { userId } = req.params;
+    const notifications = await Notification.find({ userId }).populate("eventId");
+    const events = notifications.map((notification) => notification.eventId);
+    res.status(200).json(events);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to get notifications for event", error });
+  }
+};
 
 export const getNotificationById = async (req: Request, res: Response) => {
   try {

@@ -13,7 +13,7 @@ export const getEvents = async (req: Request, res: Response) => {
 
         const { q, type } = req.query;
 
-        
+
         if (q) {
             query.name = { $regex: new RegExp(q as string, 'i') };
         }
