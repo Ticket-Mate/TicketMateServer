@@ -220,6 +220,7 @@ export const updateEventAvailableTickets = async (ticket: ITicket) => {
     } else {
         if (event.status === EventStatus.ON_SALE) {
             const updatedEvent = await event.updateOne({ $pull: { availableTicket: ticket._id } });
+            // TODO: fix this logic
             if (updatedEvent && updatedEvent.availableTicket.length === 0) {
                 updatedEvent.status = EventStatus.SOLD_OUT;
                 await updatedEvent.save();
@@ -285,11 +286,14 @@ export const removeEventAvailableTickets = async (req, res) => {
             return res.status(404).json({ message: "Ticket not found" });
         }
 
-        const event = await Event.findById(ticket.eventId);
-        await event.updateOne({ $pull: { availableTicket: ticket._id } });
-
         ticket.onSale = false;
-        await ticket.save();
+        const updatedTicket = await ticket.save();
+
+        if(!updateTicket) {
+            res.status(400).json({ message: "Ticket removed from sale" });    
+        }
+
+        await updateEventAvailableTickets(updatedTicket)
 
         res.status(200).json({ message: "Ticket removed from sale" });
     } catch (error) {

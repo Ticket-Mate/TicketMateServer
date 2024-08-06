@@ -20,7 +20,6 @@ export const getEvents = async (req: Request, res: Response) => {
 
         if (type) {
             const filterArray = (type as string).split(',').map(item => item.trim());
-            console.info('!!!!!!!!!!!!!!!!', filterArray)
             query.type = { $in: filterArray };
         }
 
