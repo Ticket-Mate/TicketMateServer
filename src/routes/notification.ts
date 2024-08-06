@@ -7,7 +7,8 @@ import {
   getNotificationById,
   createNotification,
   updateNotification,
-  deleteNotification
+  deleteNotification,
+  getInterestsEventsByUserId,
 } from "../controllers/notification";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.get("/:id", getNotificationById);
 router.patch("/:id", updateNotification);
 router.post("/", createNotification);
 router.delete('/:userId/:eventId', deleteNotification);
+router.get("/interests/:userId", getInterestsEventsByUserId);
 
 export default router;
