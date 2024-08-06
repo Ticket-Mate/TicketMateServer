@@ -7,6 +7,11 @@ import {
   deleteTicket,
   getEventsByUserId,
   getTicketCountByEventId,
+  getTicketsByUserAndEventId,
+  purchaseTickets,
+  removeEventAvailableTickets,
+  updateTicketPrice,
+  removeTicketFromSale,
 } from "../controllers/ticket_controller";
 
 const router = express.Router();
@@ -29,6 +34,22 @@ router.delete("/:id", deleteTicket);
 // routes/event.js
 router.get("/user/:userId", getEventsByUserId);
 
+// Get ticket count by event ID
 router.get("/user/:userId/event/:eventId/ticketCount", getTicketCountByEventId);
+
+// Get tickets by user ID and event ID
+router.get("/user/:userId/event/:eventId/tickets", getTicketsByUserAndEventId);
+
+// Purchase tickets
+router.post("/purchase", purchaseTickets);
+
+// Remove event's available tickets
+router.post("/removeEventAvailableTickets", removeEventAvailableTickets);
+
+// Update ticket price and status
+router.put("/updateTicketPrice/:id", updateTicketPrice);
+
+// Remove ticket from sale
+router.put("/removeTicketFromSale/:id", removeTicketFromSale);
 
 export default router;
