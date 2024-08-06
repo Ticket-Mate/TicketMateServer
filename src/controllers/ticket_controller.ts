@@ -310,6 +310,10 @@ export const updateTicketPrice = async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
+    if(updatedTicket.onSale) {
+        await updateEventAvailableTickets(updatedTicket)
+    }
+
     res.status(200).json(updatedTicket);
   } catch (error) {
     res.status(500).json({ message: "Error updating ticket price", error });
