@@ -11,14 +11,16 @@ export const getEvents = async (req: Request, res: Response) => {
     try {
         let query: EventQuery = {};
 
-        const { q, filter } = req.query;
+        const { q, type } = req.query;
 
+        
         if (q) {
-            query.name = { $regex: q, $options: "i" };
+            query.name = { $regex: new RegExp(q as string, 'i') };
         }
 
-        if (filter) {
-            const filterArray = (filter as string).split(','); 
+        if (type) {
+            const filterArray = (type as string).split(',').map(item => item.trim());
+            console.info('!!!!!!!!!!!!!!!!', filterArray)
             query.type = { $in: filterArray };
         }
 
