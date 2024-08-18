@@ -30,6 +30,21 @@ export const purchaseTickets = async (req: Request, res: Response) => {
       throw new Error("Some tickets are not available");
     }
 
+    const sellersIds = [...new Set(tickets.map((ticket) => ticket.ownerId))];
+    const sellers= await User.find({ _id: { $in: sellersIds } }).session(session);
+
+        
+    // Remove purchased tickets from sellers' tickets array
+    const sellerUpdatePromises = sellers.map((seller) => 
+      User.findByIdAndUpdate(
+        seller._id,
+        { $pull: { tickets: { $in: ticketIds } } }, // Remove tickets from the seller
+        { session }
+      )
+    );
+
+    await Promise.all(sellerUpdatePromises);
+
     const updatePromises = tickets.map((ticket) =>
       Ticket.findByIdAndUpdate(
         ticket._id,
