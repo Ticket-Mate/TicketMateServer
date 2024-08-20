@@ -11,7 +11,7 @@ const register = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(406).json({ error: "Email already exists" });
     }
@@ -41,7 +41,7 @@ const login = async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: "Email or password incorrect" });
     }
