@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
+import ms from 'ms';
+import dayjs from 'dayjs';
 
 const register = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password, phone } = req.body;
@@ -54,6 +56,7 @@ const login = async (req: Request, res: Response) => {
     user.refreshTokens = user.refreshTokens ? [...user.refreshTokens, refreshToken] : [refreshToken];
     await user.save();
 
+    
     return res.status(200).json({
       _id: user._id,
       email: user.email,
@@ -61,6 +64,8 @@ const login = async (req: Request, res: Response) => {
       lastName: user.lastName,
       accessToken,
       refreshToken,
+      refreshTokenInterval: ms(process.env.JWT_EXPIRATION),
+      lastRefreshTime: dayjs().format()
     });
   } catch (error) {
     return res.status(500).json({ error: "Server error during login" });
@@ -122,6 +127,8 @@ const refresh = async (req: Request, res: Response) => {
         lastName: user.lastName,
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
+        refreshTokenInterval: ms(process.env.JWT_EXPIRATION),
+        lastRefreshTime: dayjs().format()
       });
     } catch (error) {
       return res.status(500).json({ error: "Server error during token refresh" });

@@ -43,7 +43,7 @@ export const getNotificationsByEventId = async (
       .json({ message: "Failed to get notifications for event", error });
   }
 };
-// same func just do find by user id 
+
 export const getInterestsEventsByUserId = async (
   req: Request,
   res: Response
