@@ -13,6 +13,7 @@ import notificationRoutes from "./routes/notification";
 import uploadRoutes from "./routes/file-upload"
 import pinoHttp from 'pino-http'
 import logger from './utils/logger'
+import authMiddleware from "./common/auth_middleware";
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {
@@ -28,10 +29,10 @@ const initApp = (): Promise<Express> => {
       app.use(pinoHttp({ logger }));
       app.use("/user", userRoute);
       app.use("/auth", authRoute);
-      app.use("/event", eventRoutes);
-      app.use("/ticket", ticketRoute);
-      app.use("/notifications", notificationRoutes);
-      app.use("/upload", uploadRoutes)
+      app.use("/event",  authMiddleware ,eventRoutes);
+      app.use("/ticket", authMiddleware, ticketRoute);
+      app.use("/notifications", authMiddleware, notificationRoutes);
+      app.use("/upload", authMiddleware, uploadRoutes)
       app.use('/public', express.static('public'));
       app.use('/api/payments', paymentRoutes);
       resolve(app);
