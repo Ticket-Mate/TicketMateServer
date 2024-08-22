@@ -137,6 +137,11 @@ export const createTicket = async (req: Request, res: Response) => {
     onSale,
   } = req.body;
   try {
+    const existingTicket = await Ticket.findOne({ position, eventId });
+    if (existingTicket) {
+      return res.status(400).json({ message: "A ticket with the same seat already exists for this event." });
+    }
+    
     const newTicket = new Ticket({
       barcode,
       position,
