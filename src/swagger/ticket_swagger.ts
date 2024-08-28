@@ -1,6 +1,11 @@
 /**
 * @swagger
 * components:
+*   securitySchemes:
+*     bearerAuth:
+*       type: http
+*       scheme: bearer
+*       bearerFormat: JWT
 *   schemas:
 *     Ticket:
 *       type: object
@@ -63,6 +68,8 @@
 *   get:
 *     summary: Returns the list of all the tickets
 *     tags: [Tickets]
+*     security:
+*       - bearerAuth: []
 *     responses:
 *       200:
 *         description: The list of the tickets
@@ -72,9 +79,14 @@
 *               type: array
 *               items:
 *                 $ref: '#/components/schemas/Ticket'
+*       401:
+*         description: Unauthorized
+* 
 *   post:
 *     summary: Create a new ticket
 *     tags: [Tickets]
+*     security:
+*       - bearerAuth: []
 *     requestBody:
 *       required: true
 *       content:
@@ -88,6 +100,8 @@
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Ticket'
+*       401:
+*         description: Unauthorized
 *       500:
 *         description: Some server error
 * 
@@ -96,6 +110,8 @@
 *   get:
 *     summary: Get the ticket by id
 *     tags: [Tickets]
+*     security:
+*       - bearerAuth: []
 *     parameters:
 *       - in: path
 *         name: id
@@ -110,11 +126,16 @@
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Ticket'
+*       401:
+*         description: Unauthorized
 *       404:
 *         description: The ticket was not found
+* 
 *   put:
 *     summary: Update the ticket by the id
 *     tags: [Tickets]
+*     security:
+*       - bearerAuth: []
 *     parameters:
 *       - in: path
 *         name: id
@@ -135,13 +156,18 @@
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Ticket'
+*       401:
+*         description: Unauthorized
 *       404:
 *         description: The ticket was not found
 *       500:
 *         description: Some error happened
+* 
 *   delete:
 *     summary: Remove the ticket by id
 *     tags: [Tickets]
+*     security:
+*       - bearerAuth: []
 *     parameters:
 *       - in: path
 *         name: id
@@ -152,7 +178,8 @@
 *     responses:
 *       200:
 *         description: The ticket was deleted
+*       401:
+*         description: Unauthorized
 *       404:
 *         description: The ticket was not found
-
- */
+*/
