@@ -10,6 +10,7 @@ export enum EventStatus {
   UPCOMING = "upcoming",
   CANCELLED = "cancelled",
   ENDED = "ended",
+  ABOUT_TO_START = "about to start"
 }
 
 export interface IEvent {
