@@ -14,6 +14,8 @@
  *         - images
  *         - createdAt
  *         - updatedAt
+ *         - location
+ /*
  *       properties:
  *         _id:
  *           type: string
@@ -69,6 +71,9 @@
  *           type: string
  *           format: date-time
  *           description: The date the event was last updated
+ *          location:
+ *           type: string
+ *           description: The location of the event
  *       example:
  *         _id: 60e8c4f10b3c2b6fef9e1234
  *         name: Concert
@@ -82,6 +87,7 @@
  *         availableTicket: [60e8c4f10b3c2b6fef9e9101]
  *         createdAt: 2021-07-09T00:00:00.000Z
  *         updatedAt: 2021-07-09T00:00:00.000Z
+ *         location:  Tel Aviv
  */
 
 /**

@@ -57,6 +57,7 @@ export const createEvent = async (req: Request, res: Response) => {
         startDate,
         endDate,
         availableTicket,
+        location
     } = req.body;
 
     try {
@@ -72,6 +73,7 @@ export const createEvent = async (req: Request, res: Response) => {
             availableTicket,
             createdAt: new Date(),
             updatedAt: new Date(),
+            location
         });
         await newEvent.save();
         res.status(201).json(newEvent);
@@ -93,6 +95,7 @@ export const updateEvent = async (req: Request, res: Response) => {
         startDate,
         endDate,
         availableTicket,
+        location
     } = req.body;
     try {
         const updatedEvent = await Event.findByIdAndUpdate(
@@ -108,6 +111,7 @@ export const updateEvent = async (req: Request, res: Response) => {
                 endDate,
                 availableTicket,
                 updatedAt: new Date(),
+                location
             },
             { new: true }
         );
