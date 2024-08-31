@@ -1,11 +1,6 @@
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  *   schemas:
  *     Event:
  *       type: object
@@ -19,8 +14,6 @@
  *         - images
  *         - createdAt
  *         - updatedAt
- *         - location
- /*
  *       properties:
  *         _id:
  *           type: string
@@ -39,6 +32,8 @@
  *             - on sale
  *             - upcoming
  *             - cancelled
+ *             - ended
+ *             - about to start
  *         type:
  *           type: string
  *           description: The type of the event
@@ -58,16 +53,17 @@
  *               url:
  *                 type: string
  *                 description: The URL of the image
- *         tickets:
- *           type: array
- *           items:
- *             type: string
- *           description: List of ticket IDs associated with the event
+ *         seatmap:
+ *           type: string
+ *           description: The seatmap of the event
  *         availableTicket:
  *           type: array
  *           items:
  *             type: string
  *           description: List of available ticket IDs
+ *         location:
+ *           type: string
+ *           description: The location of the event
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -76,9 +72,6 @@
  *           type: string
  *           format: date-time
  *           description: The date the event was last updated
- *          location:
- *           type: string
- *           description: The location of the event
  *       example:
  *         _id: 60e8c4f10b3c2b6fef9e1234
  *         name: Concert
@@ -88,11 +81,11 @@
  *         startDate: 2021-07-09T18:00:00.000Z
  *         endDate: 2021-07-09T22:00:00.000Z
  *         images: [{ url: "http://example.com/image.jpg" }]
- *         tickets: [60e8c4f10b3c2b6fef9e5678]
+ *         seatmap: "http://example.com/seatmap.jpg"
  *         availableTicket: [60e8c4f10b3c2b6fef9e9101]
+ *         location: "Arena Stadium, City Center"
  *         createdAt: 2021-07-09T00:00:00.000Z
  *         updatedAt: 2021-07-09T00:00:00.000Z
- *         location:  Tel Aviv
  */
 
 /**
@@ -108,8 +101,6 @@
  *   get:
  *     summary: Returns the list of all the events
  *     tags: [Events]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The list of the events
@@ -127,8 +118,6 @@
  *   get:
  *     summary: Get the event by id
  *     tags: [Events]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -153,8 +142,6 @@
  *   post:
  *     summary: Create a new event
  *     tags: [Events]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -178,8 +165,6 @@
  *   put:
  *     summary: Update the event by the id
  *     tags: [Events]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -212,8 +197,6 @@
  *   delete:
  *     summary: Remove the event by id
  *     tags: [Events]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
