@@ -2,9 +2,9 @@ import cron from "node-cron";
 import Event, { EventStatus } from "../models/event";
 import logger from "./logger";
 
-// Run this job every hour
+// Run this job every minute
 export const scheduleEventStatusUpdate = () => {
-  cron.schedule("0 * * * *", async () => {
+  cron.schedule("* * * * *", async () => {
     try {
       const now = new Date();
       const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
@@ -42,6 +42,28 @@ export const scheduleEventStatusUpdate = () => {
         );
         logger.info(`${eventsAboutToStart.length} events marked as ABOUT TO START.`);
       }
+
+      // Find events that start more than 2 hours from now
+      const eventsMoreThanTwoHoursToStart = await Event.find({
+        startDate: { $gt: twoHoursFromNow },
+        status: { $ne: EventStatus.ENDED },
+      });
+
+      if (eventsMoreThanTwoHoursToStart.length > 0) {
+        await Promise.all(
+          eventsMoreThanTwoHoursToStart.map((event) => {
+            if (event.availableTicket.length > 0) {
+              // If there are available tickets, set status to "ON_SALE"
+              event.status = EventStatus.ON_SALE;
+            } else {
+              // If no tickets available, set status to "SOLD_OUT"
+              event.status = EventStatus.SOLD_OUT;
+            }
+            return event.save();
+          })
+        );
+      }
+
     } catch (error) {
       logger.error("Error updating event statuses:", error);
     }
