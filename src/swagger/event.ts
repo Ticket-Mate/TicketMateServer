@@ -14,6 +14,7 @@
  *         - description
  *         - status
  *         - type
+ *         - location
  *         - startDate
  *         - endDate
  *         - images
@@ -26,6 +27,9 @@
  *         name:
  *           type: string
  *           description: The name of the event
+ *         location:
+ *           type: string
+ *           description: The event location
  *         description:
  *           type: string
  *           description: The description of the event
@@ -80,6 +84,7 @@
  *         description: A live music concert.
  *         status: on sale
  *         type: Music
+ *         location: 'Tel Aviv'
  *         startDate: 2021-07-09T18:00:00.000Z
  *         endDate: 2021-07-09T22:00:00.000Z
  *         images: [{ url: "http://example.com/image.jpg" }]
