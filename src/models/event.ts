@@ -23,6 +23,7 @@ export interface IEvent {
   seatmap: string;
   startDate: Date;
   endDate: Date;
+  performanceTime: Date; // Changed to Date type
   createdAt: Date;
   updatedAt: Date;
   availableTicket: Schema.Types.ObjectId[];
@@ -45,27 +46,31 @@ const eventSchema = new mongoose.Schema<IEvent>({
   },
   type: {
     type: String,
-    requires: true,
+    required: true,
   },
   startDate: {
     type: Date,
-    requires: true,
+    required: true,
   },
   endDate: {
     type: Date,
-    requires: true,
+    required: true,
+  },
+  performanceTime: { // Changed to Date type
+    type: Date,
+    required: true,
   },
   images: [
     {
       url: {
         type: String,
-        requires: true,
+        required: true,
       },
     },
   ],
   seatmap: {
     type: String,
-    requires: false,
+    required: false,
   },
   createdAt: {
     type: Date,
@@ -83,7 +88,7 @@ const eventSchema = new mongoose.Schema<IEvent>({
   ],
   location: {
     type: String,
-    requires: false,
+    required: false,
   },
 });
 

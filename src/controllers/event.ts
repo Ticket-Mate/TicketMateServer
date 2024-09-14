@@ -13,7 +13,6 @@ export const getEvents = async (req: Request, res: Response) => {
 
         const { q, type } = req.query;
 
-
         if (q) {
             query.name = { $regex: new RegExp(q as string, 'i') };
         }
@@ -31,7 +30,6 @@ export const getEvents = async (req: Request, res: Response) => {
     }
 };
 
-
 export const getEventById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
@@ -45,7 +43,6 @@ export const getEventById = async (req: Request, res: Response) => {
     }
 };
 
-
 export const createEvent = async (req: Request, res: Response) => {
     const {
         name,
@@ -55,8 +52,8 @@ export const createEvent = async (req: Request, res: Response) => {
         images,
         seatmap,
         startDate,
-        location,
         endDate,
+        performanceTime,
         availableTicket,
         location
     } = req.body;
@@ -71,11 +68,11 @@ export const createEvent = async (req: Request, res: Response) => {
             status,
             startDate,
             endDate,
+            performanceTime,
             location,
             availableTicket,
             createdAt: new Date(),
             updatedAt: new Date(),
-            location
         });
         await newEvent.save();
         res.status(201).json(newEvent);
@@ -83,7 +80,6 @@ export const createEvent = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error creating event", error });
     }
 };
-
 
 export const updateEvent = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -97,8 +93,8 @@ export const updateEvent = async (req: Request, res: Response) => {
         startDate,
         location,
         endDate,
+        performanceTime,
         availableTicket,
-        location
     } = req.body;
     try {
         const updatedEvent = await Event.findByIdAndUpdate(
@@ -113,9 +109,9 @@ export const updateEvent = async (req: Request, res: Response) => {
                 location,
                 startDate,
                 endDate,
+                performanceTime,
                 availableTicket,
                 updatedAt: new Date(),
-                location
             },
             { new: true }
         );
@@ -127,7 +123,6 @@ export const updateEvent = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error updating event", error });
     }
 };
-
 
 export const deleteEvent = async (req: Request, res: Response) => {
     const { id } = req.params;
