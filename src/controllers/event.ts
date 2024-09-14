@@ -55,6 +55,7 @@ export const createEvent = async (req: Request, res: Response) => {
         images,
         seatmap,
         startDate,
+        location,
         endDate,
         availableTicket,
         location
@@ -70,6 +71,7 @@ export const createEvent = async (req: Request, res: Response) => {
             status,
             startDate,
             endDate,
+            location,
             availableTicket,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -93,6 +95,7 @@ export const updateEvent = async (req: Request, res: Response) => {
         images,
         seatmap,
         startDate,
+        location,
         endDate,
         availableTicket,
         location
@@ -107,6 +110,7 @@ export const updateEvent = async (req: Request, res: Response) => {
                 description,
                 images,
                 seatmap,
+                location,
                 startDate,
                 endDate,
                 availableTicket,
