@@ -43,6 +43,24 @@ export const scheduleEventStatusUpdate = () => {
         logger.info(`${eventsAboutToStart.length} events marked as ABOUT TO START.`);
       }
 
+      // Find events that have started but not yet ended
+      const eventsStarted = await Event.find({
+        startDate: { $lte: now },
+        endDate: { $gt: now },
+        status: { $nin: [EventStatus.ENDED, EventStatus.STARTED] }, // Exclude events already marked as ended or started
+      });
+
+      if (eventsStarted.length > 0) {
+        // Update their status to "STARTED"
+        await Promise.all(
+          eventsStarted.map((event) => {
+            event.status = EventStatus.STARTED;
+            return event.save();
+          })
+        );
+        logger.info(`${eventsStarted.length} events marked as STARTED.`);
+      }
+
       // Find events that start more than 2 hours from now
       const eventsMoreThanTwoHoursToStart = await Event.find({
         startDate: { $gt: twoHoursFromNow },
